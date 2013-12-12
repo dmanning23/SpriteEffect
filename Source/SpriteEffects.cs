@@ -38,11 +38,12 @@ namespace SpriteEffects
 		// Textures used by this sample.
 		Texture2D catTexture;
 		Texture2D catNormalmapTexture;
-		Texture2D glacierTexture;
-		Texture2D waterfallTexture;
 
 		// SpriteBatch instance used to render all the effects.
 		SpriteBatch spriteBatch;
+
+		RenderTarget2D lightsTarget;
+		RenderTarget2D mainTarget;
 
 		#endregion
 
@@ -60,12 +61,16 @@ namespace SpriteEffects
 		protected override void LoadContent()
 		{
 			normalmapEffect = Content.Load<Effect>("normalmap");
-			catTexture = Content.Load<Texture2D>("cat");
-			catNormalmapTexture = Content.Load<Texture2D>("cat_normalmap");
-			glacierTexture = Content.Load<Texture2D>("glacier");
-			waterfallTexture = Content.Load<Texture2D>("waterfall");
+			catTexture = Content.Load<Texture2D>("cube");
+			catNormalmapTexture = Content.Load<Texture2D>("cube_normalmap");
 
 			spriteBatch = new SpriteBatch(graphics.GraphicsDevice);
+
+			var pp = GraphicsDevice.PresentationParameters;
+			lightsTarget = new RenderTarget2D(
+				GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
+			mainTarget = new RenderTarget2D(
+				GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
 		}
 
 		#endregion
@@ -96,22 +101,46 @@ namespace SpriteEffects
 		/// </summary>
 		void DrawNormalmap(GameTime gameTime)
 		{
-			// Draw the background image.
+			////Animate the light direction.
+			//Vector3 lightDirection = new Vector3(0.0f, -1.0f, 0.9f);
+			//lightDirection.Normalize();
+
+			//Animate the light direction.
+			Vector2 spinningLight = MoveInCircle(gameTime, 1.5f);
+			double time = gameTime.TotalGameTime.TotalSeconds;
+			float tiltUpAndDown = 0.5f + (float)Math.Cos(time * 0.75) * 0.1f;
+			Vector3 lightDirection = new Vector3(spinningLight * tiltUpAndDown, 1 - tiltUpAndDown);
+			lightDirection.Normalize();
+
+
+			////Render to lightmap texture
+			GraphicsDevice.SetRenderTarget(lightsTarget);
+			GraphicsDevice.Clear(Color.Transparent);
 			spriteBatch.Begin();
-			spriteBatch.Draw(glacierTexture, GraphicsDevice.Viewport.Bounds, Color.White);
+			RenderStuff(catNormalmapTexture);
 			spriteBatch.End();
 
-			// Animate the light direction.
-			Vector2 spinningLight = MoveInCircle(gameTime, 1.5f);
+			//render to color texture
+			GraphicsDevice.SetRenderTarget(mainTarget);
+			GraphicsDevice.Clear(Color.Transparent);
+			spriteBatch.Begin();
+			RenderStuff(catTexture);
+			spriteBatch.End();
 
-			double time = gameTime.TotalGameTime.TotalSeconds;
+			//render both together with pixel shader
+			GraphicsDevice.SetRenderTarget(null);
+			GraphicsDevice.Clear(Color.CornflowerBlue);
+			normalmapEffect.Parameters["LightDirection"].SetValue(lightDirection);
 
-			float tiltUpAndDown = 0.5f + (float)Math.Cos(time * 0.75) * 0.1f;
+			// Set the normalmap texture.
+			graphics.GraphicsDevice.Textures[1] = lightsTarget;
 
-			Vector3 lightDirection = new Vector3(spinningLight * tiltUpAndDown,
-						1 - tiltUpAndDown);
+			// Begin the sprite batch.
+			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, normalmapEffect);
+			spriteBatch.Draw(mainTarget, Vector2.Zero, Color.White);
+			spriteBatch.End();
 
-			lightDirection.Normalize();
+
 
 			normalmapEffect.Parameters["LightDirection"].SetValue(lightDirection);
 
@@ -119,25 +148,33 @@ namespace SpriteEffects
 			graphics.GraphicsDevice.Textures[1] = catNormalmapTexture;
 
 			// Begin the sprite batch.
-			spriteBatch.Begin(0, null, null, null, null, normalmapEffect);
-
-			// Draw the sprite.
-			spriteBatch.Draw(catTexture, CenterOnScreen(catTexture), Color.Azure);
-
-			// End the sprite batch.
+			spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, normalmapEffect);
+			Vector2 catPos = new Vector2(320.0f, 128);
+			float rotation = 0.0f;
+			spriteBatch.Draw(catTexture, catPos, null, Color.White, rotation, Vector2.Zero, 1.0f, Microsoft.Xna.Framework.Graphics.SpriteEffects.None, 1.0f);
+			catPos.X += 200.0f;
+			normalmapEffect.Parameters["LightDirection"].SetValue(new Vector3(lightDirection.X, lightDirection.Y * -1.0f, lightDirection.Z));
+			spriteBatch.Draw(catTexture, catPos, null, Color.White, rotation, Vector2.Zero, 1.0f, Microsoft.Xna.Framework.Graphics.SpriteEffects.FlipVertically, 1.0f);
 			spriteBatch.End();
+		}
+
+		void RenderStuff(Texture2D tex)
+		{
+			Vector2 catPos = new Vector2(0, 128);
+			float rotation = 0.0f;
+			spriteBatch.Draw(tex, catPos, null, Color.White, rotation, Vector2.Zero, 1.0f, Microsoft.Xna.Framework.Graphics.SpriteEffects.None, 1.0f);
+			catPos.X += 180.0f;
+			spriteBatch.Draw(tex, catPos, null, Color.White, rotation, Vector2.Zero, 1.0f, Microsoft.Xna.Framework.Graphics.SpriteEffects.FlipVertically, 1.0f);
 		}
 
 		/// <summary>
 		/// Helper calculates the destination position needed
 		/// to center a sprite in the middle of the screen.
 		/// </summary>
-		Vector2 CenterOnScreen(Texture2D texture)
+		Vector2 TextureOrigin(Vector2 pos, Texture2D texture)
 		{
-			Viewport viewport = graphics.GraphicsDevice.Viewport;
-
-			int x = (viewport.Width - texture.Width) / 2;
-			int y = (viewport.Height - texture.Height) / 2;
+			float x = pos.X + (texture.Width * 0.5f);
+			float y = pos.Y + (texture.Height * 0.5f);
 
 			return new Vector2(x, y);
 		}

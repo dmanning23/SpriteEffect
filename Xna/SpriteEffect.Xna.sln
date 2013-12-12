@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual C# Express 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpriteEffect.Xna", "SpriteEffect.Xna\SpriteEffect.Xna.csproj", "{C93FC56C-1D3F-4D7E-B362-7E3C1415A166}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpriteEffect.XnaContent", "SpriteEffect.XnaContent\SpriteEffect.XnaContent.contentproj", "{F23C3CBA-30B3-4B87-8B72-953F96EB9D6C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpriteEffectsPipeline", "SpriteEffectsPipeline\SpriteEffectsPipeline.csproj", "{703BEF24-DE49-4DA1-A25B-56BB1E7CDCD0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C93FC56C-1D3F-4D7E-B362-7E3C1415A166}.Debug|x86.ActiveCfg = Debug|x86
+		{C93FC56C-1D3F-4D7E-B362-7E3C1415A166}.Debug|x86.Build.0 = Debug|x86
+		{C93FC56C-1D3F-4D7E-B362-7E3C1415A166}.Release|x86.ActiveCfg = Release|x86
+		{C93FC56C-1D3F-4D7E-B362-7E3C1415A166}.Release|x86.Build.0 = Release|x86
+		{F23C3CBA-30B3-4B87-8B72-953F96EB9D6C}.Debug|x86.ActiveCfg = Debug|x86
+		{F23C3CBA-30B3-4B87-8B72-953F96EB9D6C}.Release|x86.ActiveCfg = Release|x86
+		{703BEF24-DE49-4DA1-A25B-56BB1E7CDCD0}.Debug|x86.ActiveCfg = Debug|x86
+		{703BEF24-DE49-4DA1-A25B-56BB1E7CDCD0}.Debug|x86.Build.0 = Debug|x86
+		{703BEF24-DE49-4DA1-A25B-56BB1E7CDCD0}.Release|x86.ActiveCfg = Debug|x86
+		{703BEF24-DE49-4DA1-A25B-56BB1E7CDCD0}.Release|x86.Build.0 = Debug|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

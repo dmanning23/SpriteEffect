@@ -20,6 +20,7 @@ float4 main(float4 color : COLOR0, float2 texCoord : TEXCOORD0) : COLOR0
     color.rgb *= AmbientColor + lightAmount * LightColor;
     
     return tex * color;
+	//return color;
 }
 
 
