@@ -36,6 +36,8 @@ namespace SpriteEffects
 		Effect normalmapEffect;
 
 		// Textures used by this sample.
+		Texture2D cubeTexture;
+		Texture2D cubeNormalmapTexture;
 		Texture2D catTexture;
 		Texture2D catNormalmapTexture;
 
@@ -61,8 +63,10 @@ namespace SpriteEffects
 		protected override void LoadContent()
 		{
 			normalmapEffect = Content.Load<Effect>("normalmap");
-			catTexture = Content.Load<Texture2D>("cube");
-			catNormalmapTexture = Content.Load<Texture2D>("cube_normalmap");
+			catTexture = Content.Load<Texture2D>("cat");
+			catNormalmapTexture = Content.Load<Texture2D>("cat_normalmap");
+			cubeTexture = Content.Load<Texture2D>("cube");
+			cubeNormalmapTexture = Content.Load<Texture2D>("cube_normalmap");
 
 			spriteBatch = new SpriteBatch(graphics.GraphicsDevice);
 
@@ -143,6 +147,7 @@ namespace SpriteEffects
 
 
 			normalmapEffect.Parameters["LightDirection"].SetValue(lightDirection);
+			normalmapEffect.Parameters["hasNormal"].SetValue(true);
 
 			// Set the normalmap texture.
 			graphics.GraphicsDevice.Textures[1] = catNormalmapTexture;
@@ -153,8 +158,11 @@ namespace SpriteEffects
 			float rotation = 0.0f;
 			spriteBatch.Draw(catTexture, catPos, null, Color.White, rotation, Vector2.Zero, 1.0f, Microsoft.Xna.Framework.Graphics.SpriteEffects.None, 1.0f);
 			catPos.X += 200.0f;
-			normalmapEffect.Parameters["LightDirection"].SetValue(new Vector3(lightDirection.X, lightDirection.Y * -1.0f, lightDirection.Z));
-			spriteBatch.Draw(catTexture, catPos, null, Color.White, rotation, Vector2.Zero, 1.0f, Microsoft.Xna.Framework.Graphics.SpriteEffects.FlipVertically, 1.0f);
+
+			// Set the normalmap texture.
+			normalmapEffect.Parameters["hasNormal"].SetValue(false);
+			//normalmapEffect.Parameters["LightDirection"].SetValue(new Vector3(lightDirection.X, lightDirection.Y * -1.0f, lightDirection.Z));
+			spriteBatch.Draw(cubeTexture, catPos, null, Color.White, rotation, Vector2.Zero, 1.5f, Microsoft.Xna.Framework.Graphics.SpriteEffects.None, 1.0f);
 			spriteBatch.End();
 		}
 
