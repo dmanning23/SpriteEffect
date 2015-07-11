@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{290D59BD-BEA4-41CB-9E54-009D54DBF99F}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SpriteEffect.Windows</RootNamespace>
     <AssemblyName>SpriteEffect.Windows</AssemblyName>
@@ -13,6 +13,8 @@
     <FileAlignment>512</FileAlignment>
     <ProductVersion>12.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">.\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,10 +35,90 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
+    <Content Include="..\New folder\Source\Content\cat.xnb">
+      <Link>Content\cat.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\New folder\Source\Content\cat_alpha.xnb">
+      <Link>Content\cat_alpha.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\New folder\Source\Content\cat_depth.xnb">
+      <Link>Content\cat_depth.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\New folder\Source\Content\cube.xnb">
+      <Link>Content\cube.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\New folder\Source\Content\cube_alpha.xnb">
+      <Link>Content\cube_alpha.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\New folder\Source\Content\cube_depth.xnb">
+      <Link>Content\cube_depth.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\New folder\Source\Content\normalmap.xnb">
+      <Link>Content\normalmap.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\New folder\Source\Content\PassThrough.xnb">
+      <Link>Content\PassThrough.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\New folder\Source\Content\InverseColor.xnb">
+      <Link>Content\InverseColor.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\New folder\Source\Content\LightMap.xnb">
+      <Link>Content\LightMap.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="..\Source\Content\normalmap.fx">
+      <Link>Shaders\normalmap.fx</Link>
+    </None>
+    <Content Include="..\Source\Content\blank.jpg">
+      <Link>Content\blank.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Source\Content\desaturate.fx">
+      <Link>Shaders\desaturate.fx</Link>
+    </Content>
+    <Content Include="..\Source\Content\disappear.fx">
+      <Link>Shaders\disappear.fx</Link>
+    </Content>
+    <Content Include="..\Source\Content\InverseColor.fx">
+      <Link>Shaders\InverseColor.fx</Link>
+    </Content>
+    <Content Include="..\Source\Content\LightMap.fx">
+      <Link>Shaders\LightMap.fx</Link>
+    </Content>
+    <Content Include="..\Source\Content\PassThrough.fx">
+      <Link>Shaders\PassThrough.fx</Link>
+    </Content>
+    <Content Include="..\Source\Content\refraction.fx">
+      <Link>Shaders\refraction.fx</Link>
+    </Content>
+    <Content Include="..\Xna\SpriteEffect.Xna\bin\x86\Debug\Content\cat_normalmap.xnb">
+      <Link>Content\cat_normalmap.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Xna\SpriteEffect.Xna\bin\x86\Debug\Content\cube_normalmap.xnb">
+      <Link>Content\cube_normalmap.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Source\NormalMapEffect.cs">
+      <Link>NormalMapEffect.cs</Link>
+    </Compile>
     <Compile Include="..\Source\Program.cs">
       <Link>Program.cs</Link>
     </Compile>
@@ -44,70 +126,24 @@
       <Link>SpriteEffects.cs</Link>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Content Include="..\Source\Content\cat.jpg">
-      <Link>Content\cat.jpg</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\Source\Content\cat_alpha.jpg">
-      <Link>Content\cat_alpha.jpg</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\Source\Content\cat_depth.jpg">
-      <Link>Content\cat_depth.jpg</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\Source\Content\desaturate.fx">
-      <Link>Content\desaturate.fx</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\Source\Content\disappear.fx">
-      <Link>Content\disappear.fx</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\Source\Content\normalmap.fx">
-      <Link>Content\normalmap.fx</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\Source\Content\refraction.fx">
-      <Link>Content\refraction.fx</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\Source\Content\cat.xnb">
-      <Link>Content\cat.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\Source\Content\cat_normalmap.xnb">
-      <Link>Content\cat_normalmap.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\Source\Content\desaturate.xnb">
-      <Link>Content\desaturate.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\Source\Content\disappear.xnb">
-      <Link>Content\disappear.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\Source\Content\glacier.xnb">
-      <Link>Content\glacier.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\Source\Content\normalmap.xnb">
-      <Link>Content\normalmap.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\Source\Content\refraction.xnb">
-      <Link>Content\refraction.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\Source\Content\waterfall.xnb">
-      <Link>Content\waterfall.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Reference Include="MonoGame.Framework, Version=3.4.0.459, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\MonoGame.Framework.WindowsGL.3.4.0.459\lib\net40\MonoGame.Framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>packages\MonoGame.Framework.WindowsGL.3.4.0.459\lib\net40\OpenTK.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
@@ -115,10 +151,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <ItemGroup>
-    <ProjectReference Include="..\externals\MonoGame\MonoGame.Framework\MonoGame.Framework.WindowsGL.csproj">
-      <Project>{7DE47032-A904-4C29-BD22-2D235E8D91BA}</Project>
-      <Name>MonoGame.Framework.WindowsGL</Name>
-    </ProjectReference>
-  </ItemGroup>
 </Project>

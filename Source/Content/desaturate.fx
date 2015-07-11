@@ -23,6 +23,6 @@ technique Desaturate
 {
     pass Pass1
     {
-        PixelShader = compile ps_2_0 main();
+        PixelShader = compile ps_3_0 main();
     }
 }

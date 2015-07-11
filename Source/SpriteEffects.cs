@@ -1,51 +1,52 @@
-#region File Description
-//-----------------------------------------------------------------------------
-// SpriteEffects.cs
-//
-// Microsoft XNA Community Game Platform
-// Copyright (C) Microsoft Corporation. All rights reserved.
-//-----------------------------------------------------------------------------
-#endregion
-
-#region Using Statements
 using System;
+using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-
-#endregion
+//using ResolutionBuddy;
 
 namespace SpriteEffects
 {
 	/// <summary>
-	/// Sample demonstrating how shaders can be used to
-	/// apply special effects to sprite rendering.
+	/// Sample demonstrating how pixel shaders can be used to apply special effects to sprite rendering.
 	/// </summary>
-	public class SpriteEffectsGame : Microsoft.Xna.Framework.Game
+	public class SpriteEffectsGame : Game
 	{
 		#region Fields
 
 		GraphicsDeviceManager graphics;
-		KeyboardState lastKeyboardState = new KeyboardState();
-		GamePadState lastGamePadState = new GamePadState();
-		KeyboardState currentKeyboardState = new KeyboardState();
-		GamePadState currentGamePadState = new GamePadState();
 
-		// Effects used by this sample.
-		Effect normalmapEffect;
+		/// <summary>
+		/// Shader to draw the texture with the supplied color.
+		/// </summary>
+		private Effect passThrough;
+
+		/// <summary>
+		/// Shader to draw the texture with inverted color.
+		/// </summary>
+		private Effect inverseColor;
+
+		/// <summary>
+		/// Shader to draw the light map, using the supplied normal map and light direction.
+		/// </summary>
+		private Effect lightmap;
+
+		/// <summary>
+		/// Shader to draw the texture, light correctly using the supplied normal map
+		/// </summary>
+		private Effect normalmapEffect;
+		
 
 		// Textures used by this sample.
 		Texture2D cubeTexture;
 		Texture2D cubeNormalmapTexture;
 		Texture2D catTexture;
 		Texture2D catNormalmapTexture;
+		Texture2D blank;
 
 		// SpriteBatch instance used to render all the effects.
 		SpriteBatch spriteBatch;
-
-		RenderTarget2D lightsTarget;
-		RenderTarget2D mainTarget;
 
 		#endregion
 
@@ -62,19 +63,22 @@ namespace SpriteEffects
 		/// </summary>
 		protected override void LoadContent()
 		{
+			//Resolution.Init(graphics);
+			//Resolution.SetDesiredResolution(1280, 720);
+			//Resolution.SetScreenResolution(1280, 720, false);
+
+			passThrough = Content.Load<Effect>("PassThrough");
+			inverseColor = Content.Load<Effect>("InverseColor");
+			lightmap = Content.Load<Effect>("LightMap");
 			normalmapEffect = Content.Load<Effect>("normalmap");
+
 			catTexture = Content.Load<Texture2D>("cat");
 			catNormalmapTexture = Content.Load<Texture2D>("cat_normalmap");
 			cubeTexture = Content.Load<Texture2D>("cube");
 			cubeNormalmapTexture = Content.Load<Texture2D>("cube_normalmap");
+			blank = Content.Load<Texture2D>("blank");
 
 			spriteBatch = new SpriteBatch(graphics.GraphicsDevice);
-
-			var pp = GraphicsDevice.PresentationParameters;
-			lightsTarget = new RenderTarget2D(
-				GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
-			mainTarget = new RenderTarget2D(
-				GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
 		}
 
 		#endregion
@@ -86,7 +90,12 @@ namespace SpriteEffects
 		/// </summary>
 		protected override void Update(GameTime gameTime)
 		{
-			HandleInput();
+			if ((GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed) ||
+				Keyboard.GetState().IsKeyDown(Keys.Escape))
+			{
+				Exit();
+			}
+
 			base.Update(gameTime);
 		}
 
@@ -95,96 +104,59 @@ namespace SpriteEffects
 		/// </summary>
 		protected override void Draw(GameTime gameTime)
 		{
-			DrawNormalmap(gameTime);
 			base.Draw(gameTime);
-		}
 
-		/// <summary>
-		/// Effect uses a normalmap texture to apply realtime lighting while
-		/// drawing a 2D sprite.
-		/// </summary>
-		void DrawNormalmap(GameTime gameTime)
-		{
-			////Animate the light direction.
-			//Vector3 lightDirection = new Vector3(0.0f, -1.0f, 0.9f);
-			//lightDirection.Normalize();
+			//Resolution.ResetViewport();
 
-			//Animate the light direction.
-			Vector2 spinningLight = MoveInCircle(gameTime, 1.5f);
-			double time = gameTime.TotalGameTime.TotalSeconds;
-			float tiltUpAndDown = 0.5f + (float)Math.Cos(time * 0.75) * 0.1f;
-			Vector3 lightDirection = new Vector3(spinningLight * tiltUpAndDown, 1 - tiltUpAndDown);
+			//This is the light direction to use to light any norma. maps.
+			Vector3 lightDirection = new Vector3(.5f, 0.5f, 1.0f);
 			lightDirection.Normalize();
 
-
-			////Render to lightmap texture
-			GraphicsDevice.SetRenderTarget(lightsTarget);
-			GraphicsDevice.Clear(Color.Transparent);
-			spriteBatch.Begin();
-			RenderStuff(catNormalmapTexture);
-			spriteBatch.End();
-
-			//render to color texture
-			GraphicsDevice.SetRenderTarget(mainTarget);
-			GraphicsDevice.Clear(Color.Transparent);
-			spriteBatch.Begin();
-			RenderStuff(catTexture);
-			spriteBatch.End();
-
-			//render both together with pixel shader
-			GraphicsDevice.SetRenderTarget(null);
+			//Clear the device to XNA blue.
 			GraphicsDevice.Clear(Color.CornflowerBlue);
+
+			//Set the light directions.
+			//lightmap.Parameters["LightDirection"].SetValue(lightDirection);
 			normalmapEffect.Parameters["LightDirection"].SetValue(lightDirection);
 
 			// Set the normalmap texture.
-			graphics.GraphicsDevice.Textures[1] = lightsTarget;
+			graphics.GraphicsDevice.Textures[1] = catTexture;
+			Vector2 pos = Vector2.Zero;
 
-			// Begin the sprite batch.
-			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, normalmapEffect);
-			spriteBatch.Draw(mainTarget, Vector2.Zero, Color.White);
+			//Draw the plain texture, first in white and then with red tint.
+			pos = Vector2.Zero;
+			spriteBatch.Begin(0, null, null, null, null, passThrough);
+			spriteBatch.Draw(catTexture, pos, Color.White);
+			pos.Y += catTexture.Height;
+			spriteBatch.Draw(catTexture, pos, Color.Red);
 			spriteBatch.End();
 
+			////Draw the inverse texture, first in white and then with red tint.
+			//pos = Vector2.Zero;
+			//pos.X += catTexture.Width;
+			//spriteBatch.Begin(0, null, null, null, null, inverseColor);
+			//spriteBatch.Draw(catTexture, pos, Color.White);
+			//pos.Y += catTexture.Height;
+			//spriteBatch.Draw(catTexture, pos, Color.Red);
+			//spriteBatch.End();
 
-
-			normalmapEffect.Parameters["LightDirection"].SetValue(lightDirection);
-			normalmapEffect.Parameters["hasNormal"].SetValue(true);
-
-			// Set the normalmap texture.
-			graphics.GraphicsDevice.Textures[1] = catNormalmapTexture;
-
-			// Begin the sprite batch.
-			spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, normalmapEffect);
-			Vector2 catPos = new Vector2(320.0f, 128);
-			float rotation = 0.0f;
-			spriteBatch.Draw(catTexture, catPos, null, Color.White, rotation, Vector2.Zero, 1.0f, Microsoft.Xna.Framework.Graphics.SpriteEffects.None, 1.0f);
-			catPos.X += 200.0f;
-
-			// Set the normalmap texture.
-			normalmapEffect.Parameters["hasNormal"].SetValue(false);
-			//normalmapEffect.Parameters["LightDirection"].SetValue(new Vector3(lightDirection.X, lightDirection.Y * -1.0f, lightDirection.Z));
-			spriteBatch.Draw(cubeTexture, catPos, null, Color.White, rotation, Vector2.Zero, 1.5f, Microsoft.Xna.Framework.Graphics.SpriteEffects.None, 1.0f);
+			//Draw the light map, first in white and then with red tint.
+			pos = Vector2.Zero;
+			pos.X += catTexture.Width;
+			spriteBatch.Begin(0, null, null, null, null, lightmap);
+			spriteBatch.Draw(blank, pos, Color.White);
+			pos.Y += catTexture.Height;
+			spriteBatch.Draw(blank, pos, Color.Red);
 			spriteBatch.End();
-		}
 
-		void RenderStuff(Texture2D tex)
-		{
-			Vector2 catPos = new Vector2(0, 128);
-			float rotation = 0.0f;
-			spriteBatch.Draw(tex, catPos, null, Color.White, rotation, Vector2.Zero, 1.0f, Microsoft.Xna.Framework.Graphics.SpriteEffects.None, 1.0f);
-			catPos.X += 180.0f;
-			spriteBatch.Draw(tex, catPos, null, Color.White, rotation, Vector2.Zero, 1.0f, Microsoft.Xna.Framework.Graphics.SpriteEffects.FlipVertically, 1.0f);
-		}
-
-		/// <summary>
-		/// Helper calculates the destination position needed
-		/// to center a sprite in the middle of the screen.
-		/// </summary>
-		Vector2 TextureOrigin(Vector2 pos, Texture2D texture)
-		{
-			float x = pos.X + (texture.Width * 0.5f);
-			float y = pos.Y + (texture.Height * 0.5f);
-
-			return new Vector2(x, y);
+			//Draw the lit texture.
+			pos = Vector2.Zero;
+			pos.X += catTexture.Width * 2f;
+			spriteBatch.Begin(0, null, null, null, null, normalmapEffect);
+			spriteBatch.Draw(catTexture, pos, Color.White);
+			pos.Y += catTexture.Height;
+			spriteBatch.Draw(catTexture, pos, Color.Red);
+			spriteBatch.End();
 		}
 
 		/// <summary>
@@ -201,28 +173,5 @@ namespace SpriteEffects
 		}
 
 		#endregion
-
-		#region Handle Input
-
-		/// <summary>
-		/// Handles input for quitting the game.
-		/// </summary>
-		private void HandleInput()
-		{
-			lastKeyboardState = currentKeyboardState;
-			lastGamePadState = currentGamePadState;
-
-			currentKeyboardState = Keyboard.GetState();
-			currentGamePadState = GamePad.GetState(PlayerIndex.One);
-
-			// Check for exit.
-			if (currentKeyboardState.IsKeyDown(Keys.Escape) || currentGamePadState.Buttons.Back == ButtonState.Pressed)
-			{
-				Exit();
-			}
-		}
-
-		#endregion
 	}
-
 }
