@@ -1,6 +1,3 @@
-[submodule "externals/MonoGame"]
-	path = externals/MonoGame
-	url = git@github.com:dmanning23/MonoGame.git
 [submodule "externals/ResolutionBuddy"]
 	path = externals/ResolutionBuddy
 	url = git@github.com:dmanning23/ResolutionBuddy.git
