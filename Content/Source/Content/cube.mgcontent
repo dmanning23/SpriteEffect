@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Projects/SpriteEffect/New folder/../Source/Content/cat.jpg</SourceFile>
-  <SourceTime>2013-12-11T17:55:49.2574293-06:00</SourceTime>
-  <DestFile>C:/Projects/SpriteEffect/New folder/bin/../Source/Content/cat.xnb</DestFile>
-  <DestTime>2015-07-11T13:54:05.0747523-05:00</DestTime>
+  <SourceFile>C:/Projects/SpriteEffect/Content/../Source/Content/cube.jpg</SourceFile>
+  <SourceTime>2013-12-11T22:42:00.737833-06:00</SourceTime>
+  <DestFile>C:/Projects/SpriteEffect/Content/bin/../Source/Content/cube.xnb</DestFile>
+  <DestTime>2015-07-11T16:07:27.900011-05:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2015-04-29T12:14:44-05:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

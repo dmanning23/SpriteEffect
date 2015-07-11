@@ -1,11 +1,21 @@
 //Get the light map from a normal map.
 
-sampler NormalSampler : register(s1);
+float3 LightDirection;
+
+sampler NormalSampler : register(s1)
+{ 
+    Texture = (NormalTexture);
+};
 
 float4 main(float4 color : COLOR0, float2 texCoord : TEXCOORD0) : COLOR0
 {
     float4 normal = tex2D(NormalSampler, texCoord);
-    return normal;
+
+	// Compute lighting.
+    float lightAmount = min(max(dot(normal.xyz, LightDirection), 0.0), 1.0);
+	color.rgb *= lightAmount;
+
+    return color;
 }
 
 technique Normalmap

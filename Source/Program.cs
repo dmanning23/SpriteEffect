@@ -45,16 +45,16 @@ namespace SpriteEffects
 #else
     static class Program
     {
-        private static SpriteEffectsGame game;
-
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
         static void Main()
         {
-            game = new SpriteEffectsGame();
-            game.Run();
+	        using (var game = new SpriteEffectsGame())
+	        {
+		        game.Run();
+	        }
         }
     }
 #endif

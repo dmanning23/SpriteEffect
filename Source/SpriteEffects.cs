@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-//using ResolutionBuddy;
+using ResolutionBuddy;
 
 namespace SpriteEffects
 {
@@ -63,9 +63,9 @@ namespace SpriteEffects
 		/// </summary>
 		protected override void LoadContent()
 		{
-			//Resolution.Init(graphics);
-			//Resolution.SetDesiredResolution(1280, 720);
-			//Resolution.SetScreenResolution(1280, 720, false);
+			Resolution.Init(graphics);
+			Resolution.SetDesiredResolution(1280, 720);
+			Resolution.SetScreenResolution(1280, 720, false);
 
 			passThrough = Content.Load<Effect>("PassThrough");
 			inverseColor = Content.Load<Effect>("InverseColor");
@@ -106,10 +106,11 @@ namespace SpriteEffects
 		{
 			base.Draw(gameTime);
 
-			//Resolution.ResetViewport();
+			Resolution.ResetViewport();
 
 			//This is the light direction to use to light any norma. maps.
-			Vector3 lightDirection = new Vector3(.5f, 0.5f, 1.0f);
+			Vector2 dir = MoveInCircle(gameTime, 1.0f);
+			Vector3 lightDirection = new Vector3(dir.X, 1f, 0f);
 			lightDirection.Normalize();
 
 			//Clear the device to XNA blue.
@@ -118,9 +119,13 @@ namespace SpriteEffects
 			//Set the light directions.
 			//lightmap.Parameters["LightDirection"].SetValue(lightDirection);
 			normalmapEffect.Parameters["LightDirection"].SetValue(lightDirection);
+			normalmapEffect.Parameters["NormalTexture"].SetValue(cubeNormalmapTexture);
+			normalmapEffect.Parameters["AmbientColor"].SetValue(new Vector3(.25f, 0.25f, 0.25f));
+			lightmap.Parameters["LightDirection"].SetValue(lightDirection);
+			lightmap.Parameters["NormalTexture"].SetValue(cubeNormalmapTexture);
 
 			// Set the normalmap texture.
-			graphics.GraphicsDevice.Textures[1] = catTexture;
+			//graphics.GraphicsDevice.Textures[1] = catTexture;
 			Vector2 pos = Vector2.Zero;
 
 			//Draw the plain texture, first in white and then with red tint.
@@ -142,10 +147,10 @@ namespace SpriteEffects
 
 			//Draw the light map, first in white and then with red tint.
 			pos = Vector2.Zero;
-			pos.X += catTexture.Width;
+			pos.X += cubeTexture.Width;
 			spriteBatch.Begin(0, null, null, null, null, lightmap);
 			spriteBatch.Draw(blank, pos, Color.White);
-			pos.Y += catTexture.Height;
+			pos.Y += cubeTexture.Height;
 			spriteBatch.Draw(blank, pos, Color.Red);
 			spriteBatch.End();
 
@@ -153,9 +158,9 @@ namespace SpriteEffects
 			pos = Vector2.Zero;
 			pos.X += catTexture.Width * 2f;
 			spriteBatch.Begin(0, null, null, null, null, normalmapEffect);
-			spriteBatch.Draw(catTexture, pos, Color.White);
+			spriteBatch.Draw(cubeTexture, pos, Color.White);
 			pos.Y += catTexture.Height;
-			spriteBatch.Draw(catTexture, pos, Color.Red);
+			spriteBatch.Draw(cubeTexture, pos, Color.Red);
 			spriteBatch.End();
 		}
 
