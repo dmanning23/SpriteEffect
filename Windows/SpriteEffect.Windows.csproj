@@ -138,6 +138,13 @@
       <Link>Content\GaussianBlur.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\Source\Content\RotationNormalMap.fx">
+      <Link>Shaders\RotationNormalMap.fx</Link>
+    </Content>
+    <Content Include="..\Content\Source\Content\RotationNormalMap.xnb">
+      <Link>Content\RotationNormalMap.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="..\Source\Content\normalmap.fx">
       <Link>Shaders\normalmap.fx</Link>
     </None>
@@ -188,6 +195,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\externals\BloomComponent\Windows\BloomBuddy.Windows.csproj">
+      <Project>{06676666-c14f-41d8-a6ad-2cf5a0aff14b}</Project>
+      <Name>BloomBuddy.Windows</Name>
+    </ProjectReference>
     <ProjectReference Include="..\externals\ResolutionBuddy\Windows\ResolutionBuddy.Windows.csproj">
       <Project>{28342df0-0089-4a2a-b3d4-6dcd65d6d8e4}</Project>
       <Name>ResolutionBuddy.Windows</Name>

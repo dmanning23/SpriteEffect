@@ -14,7 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{8D1CA9
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatrixExtensions.Windows", "..\externals\MatrixExtensions\Windows\MatrixExtensions.Windows.csproj", "{E2C50D0B-A1C1-4F67-92CB-BE0E587A3CE6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BloomComponent.Windows", "..\externals\BloomComponent\Windows\BloomComponent.Windows.csproj", "{06676666-C14F-41D8-A6AD-2CF5A0AFF14B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BloomBuddy.Windows", "..\externals\BloomComponent\Windows\BloomBuddy.Windows.csproj", "{06676666-C14F-41D8-A6AD-2CF5A0AFF14B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

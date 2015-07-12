@@ -125,3 +125,9 @@
 /processorParam:TextureFormat=Color
 /build:../Source/Content/CubeNormalMap.png
 
+#begin ../Source/Content/RotationNormalMap.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:../Source/Content/RotationNormalMap.fx
+

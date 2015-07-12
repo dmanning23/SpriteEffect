@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using ResolutionBuddy;
 using System;
+using BloomBuddy;
 
 namespace SpriteEffects
 {
@@ -34,6 +35,11 @@ namespace SpriteEffects
 		/// Shader to draw the texture, light correctly using the supplied normal map
 		/// </summary>
 		private Effect normalmapEffect;
+
+		/// <summary>
+		/// Shader to draw the texture, light correctly using the supplied normal map
+		/// </summary>
+		private Effect rotatedNormalEffect;
 		
 
 		// Textures used by this sample.
@@ -46,6 +52,8 @@ namespace SpriteEffects
 		// SpriteBatch instance used to render all the effects.
 		SpriteBatch spriteBatch;
 
+		BloomComponent bloom;
+
 		#endregion
 
 		#region Initialization
@@ -54,6 +62,14 @@ namespace SpriteEffects
 		{
 			graphics = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
+
+			Resolution.Init(graphics);
+			Resolution.SetDesiredResolution(1280, 720);
+			Resolution.SetScreenResolution(1280, 720, false);
+
+			bloom = new BloomComponent(this);
+			bloom.Settings = BloomSettings.PresetSettings[0];
+			Components.Add(bloom);
 		}
 
 		/// <summary>
@@ -61,14 +77,11 @@ namespace SpriteEffects
 		/// </summary>
 		protected override void LoadContent()
 		{
-			Resolution.Init(graphics);
-			Resolution.SetDesiredResolution(1280, 720);
-			Resolution.SetScreenResolution(1280, 720, false);
-
 			passThrough = Content.Load<Effect>("PassThrough");
 			inverseColor = Content.Load<Effect>("InverseColor");
 			lightmap = Content.Load<Effect>("LightMap");
 			normalmapEffect = Content.Load<Effect>("normalmap");
+			rotatedNormalEffect = Content.Load<Effect>("RotationNormalMap");
 
 			catTexture = Content.Load<Texture2D>("cat");
 			catNormalmapTexture = Content.Load<Texture2D>("CatNormalMap");
@@ -102,14 +115,16 @@ namespace SpriteEffects
 		/// </summary>
 		protected override void Draw(GameTime gameTime)
 		{
-			base.Draw(gameTime);
+			bloom.BeginDraw();
 
 			Resolution.ResetViewport();
 
 			//This is the light direction to use to light any norma. maps.
 			Vector2 dir = MoveInCircle(gameTime, 1.0f);
-			Vector3 lightDirection = new Vector3(dir.X, dir.Y, .2f);
+			Vector3 lightDirection = new Vector3(0f, 1f, .2f);
 			lightDirection.Normalize();
+
+			var rotation = (float) gameTime.TotalGameTime.TotalSeconds*.25f;
 
 			//Clear the device to XNA blue.
 			GraphicsDevice.Clear(Color.CornflowerBlue);
@@ -120,6 +135,13 @@ namespace SpriteEffects
 			normalmapEffect.Parameters["NormalTexture"].SetValue(catNormalmapTexture);
 			normalmapEffect.Parameters["AmbientColor"].SetValue(new Vector3(.45f, .45f, .45f));
 			normalmapEffect.Parameters["LightColor"].SetValue(new Vector3(1f, 1f, 1f));
+
+			rotatedNormalEffect.Parameters["LightDirection"].SetValue(lightDirection);
+			rotatedNormalEffect.Parameters["NormalTexture"].SetValue(catNormalmapTexture);
+			rotatedNormalEffect.Parameters["AmbientColor"].SetValue(new Vector3(.45f, .45f, .45f));
+			rotatedNormalEffect.Parameters["LightColor"].SetValue(new Vector3(1f, 1f, 1f));
+			rotatedNormalEffect.Parameters["Rotation"].SetValue(rotation);
+
 			lightmap.Parameters["LightDirection"].SetValue(lightDirection);
 			lightmap.Parameters["NormalTexture"].SetValue(catNormalmapTexture);
 
@@ -153,14 +175,26 @@ namespace SpriteEffects
 			spriteBatch.Draw(blank, pos, Color.Red);
 			spriteBatch.End();
 
+			var catMid = new Vector2(catTexture.Width*0.5f, catTexture.Height*0.5f);
+
 			//Draw the lit texture.
 			pos = Vector2.Zero;
 			pos.X += catTexture.Width * 2f;
-			spriteBatch.Begin(0, null, null, null, null, normalmapEffect);
-			spriteBatch.Draw(catTexture, pos, Color.White);
+			spriteBatch.Begin(0, null, null, null, null, rotatedNormalEffect);
+			spriteBatch.Draw(catTexture,
+				pos + catMid, 
+				null,
+				Color.White,
+				rotation,
+				catMid,
+				Vector2.One,
+				Microsoft.Xna.Framework.Graphics.SpriteEffects.None,
+				1f);
 			pos.Y += catTexture.Height;
 			spriteBatch.Draw(catTexture, pos, Color.Red);
 			spriteBatch.End();
+
+			base.Draw(gameTime);
 		}
 
 		/// <summary>
