@@ -12,8 +12,8 @@ float4 main(float4 color : COLOR0, float2 texCoord : TEXCOORD0) : COLOR0
     float4 normal = tex2D(NormalSampler, texCoord);
 
 	// Compute lighting.
-    float lightAmount = min(max(dot(normal.xyz, LightDirection), 0.0), 1.0);
-	color.rgb *= lightAmount;
+    float lightAmount = dot(normal.xyz, LightDirection);
+	color.rgb = lightAmount;
 
     return color;
 }

@@ -73,9 +73,9 @@ namespace SpriteEffects
 			normalmapEffect = Content.Load<Effect>("normalmap");
 
 			catTexture = Content.Load<Texture2D>("cat");
-			catNormalmapTexture = Content.Load<Texture2D>("cat_normalmap");
+			catNormalmapTexture = Content.Load<Texture2D>("CatNormalMap");
 			cubeTexture = Content.Load<Texture2D>("cube");
-			cubeNormalmapTexture = Content.Load<Texture2D>("cube_normalmap");
+			cubeNormalmapTexture = Content.Load<Texture2D>("CubeNormalMap");
 			blank = Content.Load<Texture2D>("blank");
 
 			spriteBatch = new SpriteBatch(graphics.GraphicsDevice);
@@ -110,7 +110,7 @@ namespace SpriteEffects
 
 			//This is the light direction to use to light any norma. maps.
 			Vector2 dir = MoveInCircle(gameTime, 1.0f);
-			Vector3 lightDirection = new Vector3(dir.X, 1f, 0f);
+			Vector3 lightDirection = new Vector3(dir.X, dir.Y, 0.1f);
 			lightDirection.Normalize();
 
 			//Clear the device to XNA blue.
@@ -119,10 +119,10 @@ namespace SpriteEffects
 			//Set the light directions.
 			//lightmap.Parameters["LightDirection"].SetValue(lightDirection);
 			normalmapEffect.Parameters["LightDirection"].SetValue(lightDirection);
-			normalmapEffect.Parameters["NormalTexture"].SetValue(cubeNormalmapTexture);
+			normalmapEffect.Parameters["NormalTexture"].SetValue(catNormalmapTexture);
 			normalmapEffect.Parameters["AmbientColor"].SetValue(new Vector3(.25f, 0.25f, 0.25f));
 			lightmap.Parameters["LightDirection"].SetValue(lightDirection);
-			lightmap.Parameters["NormalTexture"].SetValue(cubeNormalmapTexture);
+			lightmap.Parameters["NormalTexture"].SetValue(catNormalmapTexture);
 
 			// Set the normalmap texture.
 			//graphics.GraphicsDevice.Textures[1] = catTexture;
@@ -158,9 +158,9 @@ namespace SpriteEffects
 			pos = Vector2.Zero;
 			pos.X += catTexture.Width * 2f;
 			spriteBatch.Begin(0, null, null, null, null, normalmapEffect);
-			spriteBatch.Draw(cubeTexture, pos, Color.White);
+			spriteBatch.Draw(catTexture, pos, Color.White);
 			pos.Y += catTexture.Height;
-			spriteBatch.Draw(cubeTexture, pos, Color.Red);
+			spriteBatch.Draw(catTexture, pos, Color.Red);
 			spriteBatch.End();
 		}
 

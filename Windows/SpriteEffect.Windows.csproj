@@ -99,6 +99,14 @@
       <Link>Content\PassThrough.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\Content\Source\Content\CatNormalMap.xnb">
+      <Link>Content\CatNormalMap.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Content\Source\Content\CubeNormalMap.xnb">
+      <Link>Content\CubeNormalMap.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="..\Source\Content\normalmap.fx">
       <Link>Shaders\normalmap.fx</Link>
     </None>
@@ -123,14 +131,6 @@
     </Content>
     <Content Include="..\Source\Content\refraction.fx">
       <Link>Shaders\refraction.fx</Link>
-    </Content>
-    <Content Include="..\Xna\SpriteEffect.Xna\bin\x86\Debug\Content\cat_normalmap.xnb">
-      <Link>Content\cat_normalmap.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\Xna\SpriteEffect.Xna\bin\x86\Debug\Content\cube_normalmap.xnb">
-      <Link>Content\cube_normalmap.xnb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="App.config" />
     <None Include="packages.config" />
