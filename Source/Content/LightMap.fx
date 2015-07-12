@@ -13,7 +13,7 @@ float4 main(float4 color : COLOR0, float2 texCoord : TEXCOORD0) : COLOR0
 
 	// Compute lighting.
     float lightAmount = dot(normal.xyz, LightDirection);
-	color.rgb = lightAmount;
+	color.rgb *= lightAmount;
 
     return color;
 }

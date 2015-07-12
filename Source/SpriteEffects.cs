@@ -110,7 +110,7 @@ namespace SpriteEffects
 
 			//This is the light direction to use to light any norma. maps.
 			Vector2 dir = MoveInCircle(gameTime, 1.0f);
-			Vector3 lightDirection = new Vector3(dir.X, dir.Y, 0.1f);
+			Vector3 lightDirection = new Vector3(dir.X, dir.Y, 0f);
 			lightDirection.Normalize();
 
 			//Clear the device to XNA blue.
