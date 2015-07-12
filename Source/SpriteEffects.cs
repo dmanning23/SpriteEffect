@@ -120,7 +120,8 @@ namespace SpriteEffects
 			//lightmap.Parameters["LightDirection"].SetValue(lightDirection);
 			normalmapEffect.Parameters["LightDirection"].SetValue(lightDirection);
 			normalmapEffect.Parameters["NormalTexture"].SetValue(catNormalmapTexture);
-			normalmapEffect.Parameters["AmbientColor"].SetValue(new Vector3(.25f, 0.25f, 0.25f));
+			normalmapEffect.Parameters["AmbientColor"].SetValue(new Vector3(.4f, 0.4f, 0.4f));
+			normalmapEffect.Parameters["LightColor"].SetValue(new Vector3(1f, 1f, 1f));
 			lightmap.Parameters["LightDirection"].SetValue(lightDirection);
 			lightmap.Parameters["NormalTexture"].SetValue(catNormalmapTexture);
 
