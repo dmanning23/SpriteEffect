@@ -108,7 +108,7 @@ namespace SpriteEffects
 
 			//This is the light direction to use to light any norma. maps.
 			Vector2 dir = MoveInCircle(gameTime, 1.0f);
-			Vector3 lightDirection = new Vector3(dir.X, dir.Y, 0f);
+			Vector3 lightDirection = new Vector3(dir.X, dir.Y, .2f);
 			lightDirection.Normalize();
 
 			//Clear the device to XNA blue.
@@ -118,7 +118,7 @@ namespace SpriteEffects
 			//lightmap.Parameters["LightDirection"].SetValue(lightDirection);
 			normalmapEffect.Parameters["LightDirection"].SetValue(lightDirection);
 			normalmapEffect.Parameters["NormalTexture"].SetValue(catNormalmapTexture);
-			normalmapEffect.Parameters["AmbientColor"].SetValue(new Vector3(.4f, 0.4f, 0.4f));
+			normalmapEffect.Parameters["AmbientColor"].SetValue(new Vector3(.45f, .45f, .45f));
 			normalmapEffect.Parameters["LightColor"].SetValue(new Vector3(1f, 1f, 1f));
 			lightmap.Parameters["LightDirection"].SetValue(lightDirection);
 			lightmap.Parameters["NormalTexture"].SetValue(catNormalmapTexture);
