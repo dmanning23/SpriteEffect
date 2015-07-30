@@ -138,6 +138,17 @@
       <Link>Content\GaussianBlur.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\Content\Source\Content\cube_mask.xnb">
+      <Link>Content\cube_mask.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Content\Source\Content\PaletteSwapRotationNormalMap.xnb">
+      <Link>Content\PaletteSwapRotationNormalMap.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="..\Source\Content\PaletteSwapRotationNormalMap.fx">
+      <Link>Shaders\PaletteSwapRotationNormalMap.fx</Link>
+    </None>
     <Content Include="..\Source\Content\RotationNormalMap.fx">
       <Link>Shaders\RotationNormalMap.fx</Link>
     </Content>

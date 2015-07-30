@@ -131,3 +131,20 @@
 /processorParam:DebugMode=Auto
 /build:../Source/Content/RotationNormalMap.fx
 
+#begin ../Source/Content/PaletteSwapRotationNormalMap.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:../Source/Content/PaletteSwapRotationNormalMap.fx
+
+#begin ../Source/Content/cube_mask.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:TextureFormat=Color
+/build:../Source/Content/cube_mask.png
+

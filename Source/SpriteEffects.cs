@@ -39,12 +39,15 @@ namespace SpriteEffects
 		/// <summary>
 		/// Shader to draw the texture, light correctly using the supplied normal map
 		/// </summary>
-		private Effect rotatedNormalEffect;
+		//private Effect rotatedNormalEffect;
+
+		private Effect maskNormalEffect;
 		
 
 		// Textures used by this sample.
 		Texture2D cubeTexture;
 		Texture2D cubeNormalmapTexture;
+		private Texture2D cubeMask;
 		Texture2D catTexture;
 		Texture2D catNormalmapTexture;
 		Texture2D blank;
@@ -81,12 +84,14 @@ namespace SpriteEffects
 			inverseColor = Content.Load<Effect>("InverseColor");
 			lightmap = Content.Load<Effect>("LightMap");
 			normalmapEffect = Content.Load<Effect>("normalmap");
-			rotatedNormalEffect = Content.Load<Effect>("RotationNormalMap");
+			//rotatedNormalEffect = Content.Load<Effect>("RotationNormalMap");
+			maskNormalEffect = Content.Load<Effect>("PaletteSwapRotationNormalMap");
 
 			catTexture = Content.Load<Texture2D>("cat");
 			catNormalmapTexture = Content.Load<Texture2D>("CatNormalMap");
 			cubeTexture = Content.Load<Texture2D>("cube");
 			cubeNormalmapTexture = Content.Load<Texture2D>("CubeNormalMap");
+			cubeMask = Content.Load<Texture2D>("cube_Mask");
 			blank = Content.Load<Texture2D>("blank");
 
 			spriteBatch = new SpriteBatch(graphics.GraphicsDevice);
@@ -136,11 +141,21 @@ namespace SpriteEffects
 			normalmapEffect.Parameters["AmbientColor"].SetValue(new Vector3(.45f, .45f, .45f));
 			normalmapEffect.Parameters["LightColor"].SetValue(new Vector3(1f, 1f, 1f));
 
-			rotatedNormalEffect.Parameters["LightDirection"].SetValue(lightDirection);
-			rotatedNormalEffect.Parameters["NormalTexture"].SetValue(catNormalmapTexture);
-			rotatedNormalEffect.Parameters["AmbientColor"].SetValue(new Vector3(.45f, .45f, .45f));
-			rotatedNormalEffect.Parameters["LightColor"].SetValue(new Vector3(1f, 1f, 1f));
-			rotatedNormalEffect.Parameters["Rotation"].SetValue(rotation);
+			//rotatedNormalEffect.Parameters["LightDirection"].SetValue(lightDirection);
+			//rotatedNormalEffect.Parameters["NormalTexture"].SetValue(catNormalmapTexture);
+			//rotatedNormalEffect.Parameters["AmbientColor"].SetValue(new Vector3(.45f, .45f, .45f));
+			//rotatedNormalEffect.Parameters["LightColor"].SetValue(new Vector3(1f, 1f, 1f));
+			//rotatedNormalEffect.Parameters["Rotation"].SetValue(rotation);
+
+			maskNormalEffect.Parameters["LightDirection"].SetValue(lightDirection);
+			maskNormalEffect.Parameters["NormalTexture"].SetValue(catNormalmapTexture);
+			maskNormalEffect.Parameters["HasNormal"].SetValue(true);
+			maskNormalEffect.Parameters["AmbientColor"].SetValue(new Vector3(.45f, .45f, .45f));
+			maskNormalEffect.Parameters["LightColor"].SetValue(new Vector3(1f, 1f, 1f));
+			maskNormalEffect.Parameters["Rotation"].SetValue(rotation);
+			maskNormalEffect.Parameters["PaletteSwapTexture"].SetValue(cubeMask);
+			maskNormalEffect.Parameters["HasPaletteSwap"].SetValue(false);
+			maskNormalEffect.Parameters["PaletteSwapColor"].SetValue(new Vector4(1f, 0f, 0f, 1f));
 
 			lightmap.Parameters["LightDirection"].SetValue(lightDirection);
 			lightmap.Parameters["NormalTexture"].SetValue(catNormalmapTexture);
@@ -180,7 +195,7 @@ namespace SpriteEffects
 			//Draw the lit texture.
 			pos = Vector2.Zero;
 			pos.X += catTexture.Width * 2f;
-			spriteBatch.Begin(0, null, null, null, null, rotatedNormalEffect);
+			spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, maskNormalEffect);
 			spriteBatch.Draw(catTexture,
 				pos + catMid, 
 				null,
@@ -191,7 +206,23 @@ namespace SpriteEffects
 				Microsoft.Xna.Framework.Graphics.SpriteEffects.None,
 				1f);
 			pos.Y += catTexture.Height;
-			spriteBatch.Draw(catTexture, pos, Color.Red);
+			//spriteBatch.End();
+
+			rotation = -rotation;
+			maskNormalEffect.Parameters["Rotation"].SetValue(rotation);
+			maskNormalEffect.Parameters["NormalTexture"].SetValue(cubeNormalmapTexture);
+			maskNormalEffect.Parameters["HasPaletteSwap"].SetValue(true);
+
+			//spriteBatch.Begin(0, null, null, null, null, rotatedNormalEffect);
+			spriteBatch.Draw(cubeTexture,
+				pos + catMid,
+				null,
+				Color.White,
+				rotation,
+				catMid,
+				Vector2.One,
+				Microsoft.Xna.Framework.Graphics.SpriteEffects.None,
+				1f);
 			spriteBatch.End();
 
 			base.Draw(gameTime);
