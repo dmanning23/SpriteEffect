@@ -126,7 +126,7 @@ namespace SpriteEffects
 
 			//This is the light direction to use to light any norma. maps.
 			Vector2 dir = MoveInCircle(gameTime, 1.0f);
-			Vector3 lightDirection = new Vector3(0f, 1f, .2f);
+			Vector3 lightDirection = new Vector3(1f, 0f, .2f);
 			lightDirection.Normalize();
 
 			var rotation = (float) gameTime.TotalGameTime.TotalSeconds*.25f;
@@ -153,9 +153,9 @@ namespace SpriteEffects
 			maskNormalEffect.Parameters["AmbientColor"].SetValue(new Vector3(.45f, .45f, .45f));
 			maskNormalEffect.Parameters["LightColor"].SetValue(new Vector3(1f, 1f, 1f));
 			maskNormalEffect.Parameters["Rotation"].SetValue(rotation);
-			maskNormalEffect.Parameters["PaletteSwapTexture"].SetValue(cubeMask);
-			maskNormalEffect.Parameters["HasPaletteSwap"].SetValue(false);
-			maskNormalEffect.Parameters["PaletteSwapColor"].SetValue(new Vector4(1f, 0f, 0f, 1f));
+			maskNormalEffect.Parameters["ColorMaskTexture"].SetValue(cubeMask);
+			maskNormalEffect.Parameters["HasColorMask"].SetValue(false);
+			maskNormalEffect.Parameters["ColorMask"].SetValue(new Vector4(1f, 0f, 0f, 1f));
 
 			lightmap.Parameters["LightDirection"].SetValue(lightDirection);
 			lightmap.Parameters["NormalTexture"].SetValue(catNormalmapTexture);
@@ -193,6 +193,8 @@ namespace SpriteEffects
 			var catMid = new Vector2(catTexture.Width*0.5f, catTexture.Height*0.5f);
 
 			//Draw the lit texture.
+			maskNormalEffect.Parameters["FlipHorizontal"].SetValue(true);
+
 			pos = Vector2.Zero;
 			pos.X += catTexture.Width * 2f;
 			spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, maskNormalEffect);
@@ -203,7 +205,7 @@ namespace SpriteEffects
 				rotation,
 				catMid,
 				Vector2.One,
-				Microsoft.Xna.Framework.Graphics.SpriteEffects.None,
+				Microsoft.Xna.Framework.Graphics.SpriteEffects.FlipHorizontally,
 				1f);
 			pos.Y += catTexture.Height;
 			//spriteBatch.End();
@@ -211,7 +213,8 @@ namespace SpriteEffects
 			rotation = -rotation;
 			maskNormalEffect.Parameters["Rotation"].SetValue(rotation);
 			maskNormalEffect.Parameters["NormalTexture"].SetValue(cubeNormalmapTexture);
-			maskNormalEffect.Parameters["HasPaletteSwap"].SetValue(true);
+			maskNormalEffect.Parameters["HasColorMask"].SetValue(true);
+			maskNormalEffect.Parameters["FlipHorizontal"].SetValue(false);
 
 			//spriteBatch.Begin(0, null, null, null, null, rotatedNormalEffect);
 			spriteBatch.Draw(cubeTexture,
