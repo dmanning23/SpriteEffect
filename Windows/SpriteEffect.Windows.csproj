@@ -146,12 +146,19 @@
       <Link>Content\PaletteSwapRotationNormalMap.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\Content\Source\Content\AnimationBuddyShader.xnb">
+      <Link>Content\AnimationBuddyShader.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="..\Source\Content\PaletteSwapRotationNormalMap.fx">
       <Link>Shaders\PaletteSwapRotationNormalMap.fx</Link>
     </None>
-    <Content Include="..\Source\Content\RotationNormalMap.fx">
+    <None Include="..\Source\Content\AnimationBuddyShader.fx">
+      <Link>Shaders\AnimationBuddyShader.fx</Link>
+    </None>
+    <None Include="..\Source\Content\RotationNormalMap.fx">
       <Link>Shaders\RotationNormalMap.fx</Link>
-    </Content>
+    </None>
     <Content Include="..\Content\Source\Content\RotationNormalMap.xnb">
       <Link>Content\RotationNormalMap.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -163,24 +170,24 @@
       <Link>Content\blank.jpg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\Source\Content\desaturate.fx">
+    <None Include="..\Source\Content\desaturate.fx">
       <Link>Shaders\desaturate.fx</Link>
-    </Content>
-    <Content Include="..\Source\Content\disappear.fx">
+    </None>
+    <None Include="..\Source\Content\disappear.fx">
       <Link>Shaders\disappear.fx</Link>
-    </Content>
-    <Content Include="..\Source\Content\InverseColor.fx">
+    </None>
+    <None Include="..\Source\Content\InverseColor.fx">
       <Link>Shaders\InverseColor.fx</Link>
-    </Content>
-    <Content Include="..\Source\Content\LightMap.fx">
+    </None>
+    <None Include="..\Source\Content\LightMap.fx">
       <Link>Shaders\LightMap.fx</Link>
-    </Content>
-    <Content Include="..\Source\Content\PassThrough.fx">
+    </None>
+    <None Include="..\Source\Content\PassThrough.fx">
       <Link>Shaders\PassThrough.fx</Link>
-    </Content>
-    <Content Include="..\Source\Content\refraction.fx">
+    </None>
+    <None Include="..\Source\Content\refraction.fx">
       <Link>Shaders\refraction.fx</Link>
-    </Content>
+    </None>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>

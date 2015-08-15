@@ -148,3 +148,9 @@
 /processorParam:TextureFormat=Color
 /build:../Source/Content/cube_mask.png
 
+#begin ../Source/Content/AnimationBuddyShader.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:../Source/Content/AnimationBuddyShader.fx
+

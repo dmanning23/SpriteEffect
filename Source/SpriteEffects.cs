@@ -85,7 +85,8 @@ namespace SpriteEffects
 			lightmap = Content.Load<Effect>("LightMap");
 			normalmapEffect = Content.Load<Effect>("normalmap");
 			//rotatedNormalEffect = Content.Load<Effect>("RotationNormalMap");
-			maskNormalEffect = Content.Load<Effect>("PaletteSwapRotationNormalMap");
+			//maskNormalEffect = Content.Load<Effect>("PaletteSwapRotationNormalMap");
+			maskNormalEffect = Content.Load<Effect>("AnimationBuddyShader");
 
 			catTexture = Content.Load<Texture2D>("cat");
 			catNormalmapTexture = Content.Load<Texture2D>("CatNormalMap");
@@ -155,7 +156,8 @@ namespace SpriteEffects
 			maskNormalEffect.Parameters["Rotation"].SetValue(rotation);
 			maskNormalEffect.Parameters["ColorMaskTexture"].SetValue(cubeMask);
 			maskNormalEffect.Parameters["HasColorMask"].SetValue(false);
-			maskNormalEffect.Parameters["ColorMask"].SetValue(new Vector4(1f, 0f, 0f, 1f));
+			maskNormalEffect.Parameters["ColorMask"].SetValue(new Vector4(1f, 1f, 1f, 1f));
+			maskNormalEffect.Parameters["FlipHorizontal"].SetValue(false);
 
 			lightmap.Parameters["LightDirection"].SetValue(lightDirection);
 			lightmap.Parameters["NormalTexture"].SetValue(catNormalmapTexture);
@@ -220,7 +222,7 @@ namespace SpriteEffects
 			spriteBatch.Draw(cubeTexture,
 				pos + catMid,
 				null,
-				Color.White,
+				Color.Green,
 				rotation,
 				catMid,
 				Vector2.One,
