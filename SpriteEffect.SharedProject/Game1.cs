@@ -68,7 +68,7 @@ namespace SpriteEffects
 
 			Resolution.Init(graphics);
 			Resolution.SetDesiredResolution(1280, 720);
-			Resolution.SetScreenResolution(1280, 720, false);
+			Resolution.SetScreenResolution(800, 600, false);
 
 			//bloom = new BloomComponent(this);
 			//bloom.Settings = BloomSettings.PresetSettings[0];
@@ -170,7 +170,7 @@ namespace SpriteEffects
 
 			//Draw the plain texture, first in white and then with red tint.
 			pos = Vector2.Zero;
-			spriteBatch.Begin(0, null, null, null, null, passThrough);
+			spriteBatch.Begin(0, null, null, null, null, passThrough, Resolution.TransformationMatrix());
 			spriteBatch.Draw(catTexture, pos, Color.White);
 			pos.Y += catTexture.Height;
 			spriteBatch.Draw(catTexture, pos, Color.Red);
@@ -188,7 +188,7 @@ namespace SpriteEffects
 			//Draw the light map, first in white and then with red tint.
 			pos = Vector2.Zero;
 			pos.X += cubeTexture.Width;
-			spriteBatch.Begin(0, null, null, null, null, lightmap);
+			spriteBatch.Begin(0, null, null, null, null, lightmap, Resolution.TransformationMatrix());
 			spriteBatch.Draw(blank, pos, Color.White);
 			pos.Y += cubeTexture.Height;
 			spriteBatch.Draw(blank, pos, Color.Red);
@@ -201,7 +201,7 @@ namespace SpriteEffects
 
 			pos = Vector2.Zero;
 			pos.X += catTexture.Width * 2f;
-			spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, maskNormalEffect);
+			spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, maskNormalEffect, Resolution.TransformationMatrix());
 			spriteBatch.Draw(catTexture,
 				pos + catMid, 
 				null,
