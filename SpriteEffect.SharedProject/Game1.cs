@@ -66,9 +66,11 @@ namespace SpriteEffects
 			graphics = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
 
-			Resolution.Init(graphics);
-			Resolution.SetDesiredResolution(1280, 720);
-			Resolution.SetScreenResolution(800, 600, false);
+#if __IOS__
+			var resolution = new ResolutionComponent(this, graphics, new Point(1280, 720), new Point(1280, 720), true, true);
+#else
+			var resolution = new ResolutionComponent(this, graphics, new Point(1280, 720), new Point(1280, 720), false, false);
+#endif
 
 			//bloom = new BloomComponent(this);
 			//bloom.Settings = BloomSettings.PresetSettings[0];
@@ -80,19 +82,17 @@ namespace SpriteEffects
 		/// </summary>
 		protected override void LoadContent()
 		{
-			passThrough = Content.Load<Effect>(@"PassThrough");
+			passThrough = Content.Load<Effect>("PassThrough");
 			inverseColor = Content.Load<Effect>("InverseColor");
 			lightmap = Content.Load<Effect>("LightMap");
 			normalmapEffect = Content.Load<Effect>("normalmap");
-			//rotatedNormalEffect = Content.Load<Effect>("RotationNormalMap");
-			//maskNormalEffect = Content.Load<Effect>("PaletteSwapRotationNormalMap");
 			maskNormalEffect = Content.Load<Effect>("AnimationBuddyShader");
 
 			catTexture = Content.Load<Texture2D>("cat");
 			catNormalmapTexture = Content.Load<Texture2D>("CatNormalMap");
 			cubeTexture = Content.Load<Texture2D>("cube");
 			cubeNormalmapTexture = Content.Load<Texture2D>("CubeNormalMap");
-			cubeMask = Content.Load<Texture2D>("cube_Mask");
+			cubeMask = Content.Load<Texture2D>("cube_mask");
 			blank = Content.Load<Texture2D>("blank");
 
 			spriteBatch = new SpriteBatch(graphics.GraphicsDevice);
@@ -125,30 +125,21 @@ namespace SpriteEffects
 		{
 			//bloom.BeginDraw();
 
-			Resolution.ResetViewport();
-
 			//This is the light direction to use to light any norma. maps.
 			Vector2 dir = MoveInCircle(gameTime, 1.0f);
 			Vector3 lightDirection = new Vector3(1f, 0f, .2f);
 			lightDirection.Normalize();
 
-			var rotation = (float) gameTime.TotalGameTime.TotalSeconds*.25f;
+			var rotation = (float)gameTime.TotalGameTime.TotalSeconds * .25f;
 
 			//Clear the device to XNA blue.
 			GraphicsDevice.Clear(Color.CornflowerBlue);
 
 			//Set the light directions.
-			//lightmap.Parameters["LightDirection"].SetValue(lightDirection);
 			normalmapEffect.Parameters["LightDirection"].SetValue(lightDirection);
 			normalmapEffect.Parameters["NormalTexture"].SetValue(catNormalmapTexture);
 			normalmapEffect.Parameters["AmbientColor"].SetValue(new Vector3(.45f, .45f, .45f));
 			normalmapEffect.Parameters["LightColor"].SetValue(new Vector3(1f, 1f, 1f));
-
-			//rotatedNormalEffect.Parameters["LightDirection"].SetValue(lightDirection);
-			//rotatedNormalEffect.Parameters["NormalTexture"].SetValue(catNormalmapTexture);
-			//rotatedNormalEffect.Parameters["AmbientColor"].SetValue(new Vector3(.45f, .45f, .45f));
-			//rotatedNormalEffect.Parameters["LightColor"].SetValue(new Vector3(1f, 1f, 1f));
-			//rotatedNormalEffect.Parameters["Rotation"].SetValue(rotation);
 
 			maskNormalEffect.Parameters["LightDirection"].SetValue(lightDirection);
 			maskNormalEffect.Parameters["NormalTexture"].SetValue(catNormalmapTexture);
@@ -165,36 +156,17 @@ namespace SpriteEffects
 			lightmap.Parameters["NormalTexture"].SetValue(catNormalmapTexture);
 
 			// Set the normalmap texture.
-			//graphics.GraphicsDevice.Textures[1] = catTexture;
 			Vector2 pos = Vector2.Zero;
 
 			//Draw the plain texture, first in white and then with red tint.
 			pos = Vector2.Zero;
-			spriteBatch.Begin(0, null, null, null, null, passThrough, Resolution.TransformationMatrix());
-			spriteBatch.Draw(catTexture, pos, Color.White);
-			pos.Y += catTexture.Height;
-			spriteBatch.Draw(catTexture, pos, Color.Red);
-			spriteBatch.End();
-
-			////Draw the inverse texture, first in white and then with red tint.
-			//pos = Vector2.Zero;
-			//pos.X += catTexture.Width;
-			//spriteBatch.Begin(0, null, null, null, null, inverseColor);
-			//spriteBatch.Draw(catTexture, pos, Color.White);
-			//pos.Y += catTexture.Height;
-			//spriteBatch.Draw(catTexture, pos, Color.Red);
-			//spriteBatch.End();
+			DrawPassthrough(pos);
 
 			//Draw the light map, first in white and then with red tint.
 			pos = Vector2.Zero;
-			pos.X += cubeTexture.Width;
-			spriteBatch.Begin(0, null, null, null, null, lightmap, Resolution.TransformationMatrix());
-			spriteBatch.Draw(blank, pos, Color.White);
-			pos.Y += cubeTexture.Height;
-			spriteBatch.Draw(blank, pos, Color.Red);
-			spriteBatch.End();
+			DrawLightmap(pos);
 
-			var catMid = new Vector2(catTexture.Width*0.5f, catTexture.Height*0.5f);
+			var catMid = new Vector2(catTexture.Width * 0.5f, catTexture.Height * 0.5f);
 
 			//Draw the lit texture.
 			maskNormalEffect.Parameters["FlipHorizontal"].SetValue(true);
@@ -203,7 +175,7 @@ namespace SpriteEffects
 			pos.X += catTexture.Width * 2f;
 			spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, maskNormalEffect, Resolution.TransformationMatrix());
 			spriteBatch.Draw(catTexture,
-				pos + catMid, 
+				pos + catMid,
 				null,
 				Color.White,
 				rotation,
@@ -212,7 +184,6 @@ namespace SpriteEffects
 				Microsoft.Xna.Framework.Graphics.SpriteEffects.FlipHorizontally,
 				1f);
 			pos.Y += catTexture.Height;
-			//spriteBatch.End();
 
 			rotation = -rotation;
 			maskNormalEffect.Parameters["Rotation"].SetValue(rotation);
@@ -220,7 +191,6 @@ namespace SpriteEffects
 			maskNormalEffect.Parameters["HasColorMask"].SetValue(true);
 			maskNormalEffect.Parameters["FlipHorizontal"].SetValue(false);
 
-			//spriteBatch.Begin(0, null, null, null, null, rotatedNormalEffect);
 			spriteBatch.Draw(cubeTexture,
 				pos + catMid,
 				null,
@@ -233,6 +203,25 @@ namespace SpriteEffects
 			spriteBatch.End();
 
 			base.Draw(gameTime);
+		}
+
+		private void DrawLightmap(Vector2 pos)
+		{
+			pos.X += cubeTexture.Width;
+			spriteBatch.Begin(0, null, null, null, null, lightmap, Resolution.TransformationMatrix());
+			spriteBatch.Draw(blank, pos, Color.White);
+			pos.Y += cubeTexture.Height;
+			spriteBatch.Draw(blank, pos, Color.Red);
+			spriteBatch.End();
+		}
+
+		private void DrawPassthrough(Vector2 pos)
+		{
+			spriteBatch.Begin(0, null, null, null, null, passThrough, Resolution.TransformationMatrix());
+			spriteBatch.Draw(catTexture, pos, Color.White);
+			pos.Y += catTexture.Height;
+			spriteBatch.Draw(catTexture, pos, Color.Red);
+			spriteBatch.End();
 		}
 
 		/// <summary>
